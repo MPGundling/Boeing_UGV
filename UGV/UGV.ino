@@ -15,11 +15,11 @@ Adafruit_DCMotor *rightMotor = AFMS.getMotor(2);
 Adafruit_DCMotor *intakeMotor = AFMS.getMotor(3);
 
 int incomingbyte = 0;
-
+int _speed = 64;
 void setup() {
   Serial.begin(9600);
-  Serial.println("Boeing UGV - Press 'W' for forward, 'S' for reverse, 'A' for left, 'D' for right");
-
+  Serial.println("Boeing UGV - Press 'W' for forward, 'S' for reverse, 'A' for left, 'D' for right, 'SPACE' for stop");
+  
   AFMS.begin();  // create with the default frequency 1.6KHz
   
 }
@@ -32,12 +32,34 @@ void loop() {
  }
  switch(incomingbyte)
  {
+  case 'g':
+    Serial.println("25% Power");
+    _speed = 64; 
+    incomingbyte = '*';
+    break;
+  
+  case 'h':
+    Serial.println("50% Power");
+    _speed = 128;
+    incomingbyte='*';
+    break;
+  
+  case 'b':
+    Serial.println("100% Power");
+    _speed = 250;
+    incomingbyte='*';
+    break;
+  
   case 'w':
     Serial.println("Forward");
-    leftMotor->setSpeed(150);
-    rightMotor->setSpeed(150);
-    leftMotor->run(FORWARD);
-    rightMotor->run(FORWARD);
+    for (int i=0; i<(_speed); i++){
+      leftMotor->setSpeed(i);
+      rightMotor->setSpeed(i);
+      leftMotor->run(FORWARD);
+      rightMotor->run(FORWARD);
+      delay(4);
+    }
+    
     incomingbyte = '*';
     break;
   
