@@ -98,7 +98,13 @@ void loop() {
     rightMotor->run(RELEASE);
     incomingbyte = '*';
     break;
-  
+
+    default:
+      Serial.println("STOP");
+      leftMotor->setSpeed(0);
+      rightMotor->setSpeed(0);
+      leftMotor->run(RELEASE);
+      rightMotor->run(RELEASE);
   delay(10);
  }//end switch
 }//end void loop
