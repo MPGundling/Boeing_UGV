@@ -26,13 +26,13 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
- if(Serial.available()>0)
+ if(Serial.available() > 0)
  {
   incomingbyte = Serial.read();
  }
  switch(incomingbyte)
  {
-  //MARK: Speed limiting.
+  //MARK: Movement speed control.
   
   case 'g':  
     _speed = 64; 
