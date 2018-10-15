@@ -32,6 +32,8 @@ void loop() {
  }
  switch(incomingbyte)
  {
+  //MARK: Speed limiting.
+  
   case 'g':  
     _speed = 64; 
     incomingbyte = '*';
@@ -52,6 +54,28 @@ void loop() {
 
     Serial.println("100% Power");
     break;
+
+  //MARK: Belt intake control.
+
+  case 'i':
+    intakeMotor -> setSpeed(250);
+    intakeMotor -> run(REVERSE);
+    delay(4);
+    incomingbyte = '*';
+
+    Serial.println("Intake accepting");
+    break;
+
+  case 'o':
+    intakeMotor -> setSpeed(100);
+    intakeMotor -> run(FORWARD);
+    delay(4);
+    incomingbyte = '*';
+
+    Serial.println("Intake rejecting");
+    break;
+
+  //MARK: Movement control.
   
   case 'w':
   // TODO: Potentially refactor to setSpeed to _speed without for loop as this loop may be causing issues with successive inputs.
@@ -103,7 +127,7 @@ void loop() {
 
     Serial.println("Right");
     break;
-   
+
    case ' ':
     leftMotor->setSpeed(0);
     rightMotor->setSpeed(0);
@@ -119,6 +143,7 @@ void loop() {
       rightMotor->setSpeed(0);
       leftMotor->run(RELEASE);
       rightMotor->run(RELEASE);
+      incomingbyte = '';
 
       Serial.println("No input");
       break;
