@@ -32,79 +32,97 @@ void loop() {
  }
  switch(incomingbyte)
  {
-  case 'g':
-    Serial.println("25% Power");
+  case 'g':  
     _speed = 64; 
     incomingbyte = '*';
+    
+    Serial.println("25% Power");
     break;
   
   case 'h':
-    Serial.println("50% Power");
     _speed = 128;
-    incomingbyte='*';
+    incomingbyte = '*';
+
+    Serial.println("50% Power");
     break;
   
   case 'b':
-    Serial.println("100% Power");
     _speed = 250;
-    incomingbyte='*';
+    incomingbyte = '*';
+
+    Serial.println("100% Power");
     break;
   
   case 'w':
-    Serial.println("Forward");
-    for (int i=0; i<(_speed); i++){
-      leftMotor->setSpeed(i);
-      rightMotor->setSpeed(i);
-      leftMotor->run(FORWARD);
-      rightMotor->run(FORWARD);
+  // TODO: Potentially refactor to setSpeed to _speed without for loop as this loop may be causing issues with successive inputs.
+    for (int i = 0; i < (_speed); i++) {
+      leftMotor -> setSpeed(i);
+      rightMotor -> setSpeed(i);
+      leftMotor -> run(FORWARD);
+      rightMotor -> run(FORWARD);
       delay(4);
-    }
-    
+    }  
     incomingbyte = '*';
+    
+    Serial.println("Forward");
     break;
   
   case 's':
-    Serial.println("Backward");
-    leftMotor->setSpeed(150);
-    rightMotor->setSpeed(150);
-    leftMotor->run(BACKWARD);
-    rightMotor->run(BACKWARD);
+    for (int i = 0; i < (_speed); i++) {
+      leftMotor -> setSpeed(i);
+      rightMotor -> setSpeed(i);
+      leftMotor -> run(BACKWARDS);
+      rightMotor -> run(BACKWARDS);
+      delay(4);
+    }
     incomingbyte = '*';
+    
+    Serial.println("Backward");
     break;
     
   case 'a':
-    Serial.println("Left");
-    leftMotor->setSpeed(0);
-    rightMotor->setSpeed(150);
-    leftMotor->run(RELEASE);
-    rightMotor->run(FORWARD);
+    for (int i = 0; i < (_speed); i++) {
+      leftMotor -> setSpeed(0);
+      rightMotor -> setSpeed(i);
+      leftMotor -> run(RELEASE);
+      rightMotor -> run(FORWARD);
+    }
     incomingbyte = '*';
+    
+    Serial.println("Left");
     break;
  
   case 'd':
-    Serial.println("Right");
-    leftMotor->setSpeed(150);
-    rightMotor->setSpeed(0);
-    leftMotor->run(FORWARD);
-    rightMotor->run(RELEASE);
+    for (int i = 0; i < (_speed); i++) {
+      leftMotor -> setSpeed(i);
+      rightMotor -> setSpeed(0);
+      leftMotor -> run(FORWARD);
+      rightMotor -> run(RELEASE);
+    }
     incomingbyte = '*';
+
+    Serial.println("Right");
     break;
    
    case ' ':
-    Serial.println("STOP");
     leftMotor->setSpeed(0);
     rightMotor->setSpeed(0);
     leftMotor->run(RELEASE);
     rightMotor->run(RELEASE);
     incomingbyte = '*';
+
+    Serial.println("STOP");
     break;
 
     default:
-      Serial.println("STOP");
       leftMotor->setSpeed(0);
       rightMotor->setSpeed(0);
       leftMotor->run(RELEASE);
       rightMotor->run(RELEASE);
+
+      Serial.println("No input");
+      break;
+      
   delay(10);
  }//end switch
 }//end void loop
