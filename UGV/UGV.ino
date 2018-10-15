@@ -32,27 +32,50 @@ void loop() {
  }
  switch(incomingbyte)
  {
-  //MARK: Movement speed control.
+  //MARK: Movement speed toggle.
   
-  case 'g':  
+  case 'b':  
     _speed = 64; 
     incomingbyte = '*';
     
-    Serial.println("25% Power");
+    Serial.println("Movement - 25% Power");
     break;
   
-  case 'h':
+  case 'n':
     _speed = 128;
     incomingbyte = '*';
 
-    Serial.println("50% Power");
+    Serial.println("Movement - 50% Power");
     break;
   
-  case 'b':
+  case 'm':
     _speed = 250;
     incomingbyte = '*';
 
-    Serial.println("100% Power");
+    Serial.println("Movement - 100% Power");
+    break;
+
+  //MARK: Belt intake speed toggle.
+
+  case 'j':  
+    _speed = 64; 
+    incomingbyte = '*';
+    
+    Serial.println("Intake - 25% Power");
+    break;
+  
+  case 'k':
+    _speed = 128;
+    incomingbyte = '*';
+
+    Serial.println("Intake - 50% Power");
+    break;
+  
+  case 'l':
+    _speed = 250;
+    incomingbyte = '*';
+
+    Serial.println("Intake - 100% Power");
     break;
 
   //MARK: Belt intake control.
