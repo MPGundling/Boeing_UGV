@@ -152,21 +152,21 @@ void loop() {
     break;
 
    case ' ':
-    leftMotor->setSpeed(0);
-    rightMotor->setSpeed(0);
-    leftMotor->run(RELEASE);
-    rightMotor->run(RELEASE);
+    leftMotor -> setSpeed(0);
+    rightMotor -> setSpeed(0);
+    leftMotor -> run(RELEASE);
+    rightMotor -> run(RELEASE);
     incomingbyte = '*';
 
     Serial.println("STOP");
     break;
 
     default:
-      leftMotor->setSpeed(0);
-      rightMotor->setSpeed(0);
-      leftMotor->run(RELEASE);
-      rightMotor->run(RELEASE);
-      incomingbyte = '';
+    // If no input, stop all motors, but maintain speed setting.
+      leftMotor -> run(RELEASE);
+      rightMotor -> run(RELEASE);
+      intakeMotor -> run(RELEASE);
+      incomingbyte = '*';
 
       Serial.println("No input");
       break;
