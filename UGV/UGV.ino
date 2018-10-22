@@ -81,18 +81,22 @@ void loop() {
     //MARK: Belt intake control.
 
     case 'i':
-      intakeMotor -> setSpeed(_speed_intake);
-      intakeMotor -> run(BACKWARD);
-      delay(4);
+      for (int i = 0; i < (_speed_intake); i++) {
+        intakeMotor -> setSpeed(_speed_intake);
+        intakeMotor -> run(BACKWARD);
+        delay(4);
+      }
       incomingbyte = '*';
 
       Serial.println("Intake accepting");
       break;
 
     case 'o':
-      intakeMotor -> setSpeed(_speed_intake);
-      intakeMotor -> run(FORWARD);
-      delay(4);
+      for (int i = 0; i < (_speed_intake); i++) {
+        intakeMotor -> setSpeed(_speed_intake);
+        intakeMotor -> run(FORWARD);
+        delay(4);
+      }
       incomingbyte = '*';
 
       Serial.println("Intake rejecting");
@@ -110,7 +114,6 @@ void loop() {
     //MARK: Movement control.
 
     case 'w':
-      // TODO: Potentially refactor to setSpeed to _speed without for loop as this loop may be causing issues with successive inputs.
       for (int i = 0; i < (_speed); i++) {
         leftMotor -> setSpeed(i);
         rightMotor -> setSpeed(i);
