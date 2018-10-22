@@ -81,7 +81,7 @@ void loop() {
     //MARK: Belt intake control.
 
     case 'i':
-      intakeMotor -> setSpeed(250);
+      intakeMotor -> setSpeed(_speed_intake);
       intakeMotor -> run(BACKWARD);
       delay(4);
       incomingbyte = '*';
@@ -90,7 +90,7 @@ void loop() {
       break;
 
     case 'o':
-      intakeMotor -> setSpeed(100);
+      intakeMotor -> setSpeed(_speed_intake);
       intakeMotor -> run(FORWARD);
       delay(4);
       incomingbyte = '*';
