@@ -15,6 +15,7 @@ Adafruit_DCMotor *intakeMotor = AFMS.getMotor(3);
 
 int incomingbyte = 0;
 int _speed = 64;
+int _speed_intake = 64;
 void setup() {
   Serial.begin(9600);
   Serial.println("Boeing UGV - Press 'W' for forward, 'S' for reverse, 'A' for left, 'D' for right, 'SPACE' for stop");
@@ -57,21 +58,21 @@ void loop() {
     //MARK: Belt intake speed toggle.
 
     case 'j':
-      _speed = 64;
+      _speed_intake = 64;
       incomingbyte = '*';
 
       Serial.println("Intake - 25% Power");
       break;
 
     case 'k':
-      _speed = 128;
+      _speed_intake = 128;
       incomingbyte = '*';
 
       Serial.println("Intake - 50% Power");
       break;
 
     case 'l':
-      _speed = 250;
+      _speed_intake = 250;
       incomingbyte = '*';
 
       Serial.println("Intake - 100% Power");
