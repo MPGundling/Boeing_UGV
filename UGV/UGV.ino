@@ -89,13 +89,23 @@ void loop() {
     rightMotor->run(RELEASE);
     incomingbyte = '*';
     break;
-   
+  case 'f':
+    Serial.println("Current test. All on");
+    intakeMotor->setSpeed(_speed);
+    leftMotor->setSpeed(_speed);
+    rightMotor->setSpeed(_speed);
+    intakeMotor->run(FORWARD);
+    leftMotor->run(FORWARD);
+    rightMotor->run(FORWARD);
+    incomingbyte='*';
+    break;
    case ' ':
     Serial.println("STOP");
     leftMotor->setSpeed(0);
     rightMotor->setSpeed(0);
     leftMotor->run(RELEASE);
     rightMotor->run(RELEASE);
+    intakeMotor->run(RELEASE);
     incomingbyte = '*';
     break;
   
