@@ -1,5 +1,6 @@
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
+#include <Servo.h>
 
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -13,16 +14,30 @@ Adafruit_DCMotor *rightMotor = AFMS.getMotor(2);
 // Intake motor
 Adafruit_DCMotor *intakeMotor = AFMS.getMotor(3);
 
+Servo panServo;
+Servo tiltServo;
+
 int incomingbyte = 0;
 int _speed = 64;
 int _speed_intake = 64;
 
 char previous_input;
+
+int servoHome = 90; //Default position of Servo
+int panServo = servoHome;
+int tiltServo = servoHome;
+
+int panServoPin = 9;
+int tiltServoPin = 10;
+
 void setup() {
   Serial.begin(9600);
-  Serial.println("Boeing UGV - Press 'W' for forward, 'S' for reverse, 'A' for left, 'D' for right, 'SPACE' for stop");
+  Serial.println("BOEING UGV - START");
 
   AFMS.begin();  // create with the default frequency 1.6KHz
+
+  panServo.attach(panServoPin);
+  tiltServo.attach(tiltServoPin);
 
 }
 
