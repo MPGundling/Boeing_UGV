@@ -16,6 +16,8 @@ Adafruit_DCMotor *intakeMotor = AFMS.getMotor(3);
 int incomingbyte = 0;
 int _speed = 64;
 int _speed_intake = 64;
+
+char previous_input;
 void setup() {
   Serial.begin(9600);
   Serial.println("Boeing UGV - Press 'W' for forward, 'S' for reverse, 'A' for left, 'D' for right, 'SPACE' for stop");
@@ -114,12 +116,20 @@ void loop() {
     //MARK: Movement control.
 
     case 'w':
-      for (int i = 0; i < (_speed); i++) {
-        leftMotor -> setSpeed(i);
-        rightMotor -> setSpeed(i);
+      if (previous_input = 'w') {
         leftMotor -> run(FORWARD);
         rightMotor -> run(FORWARD);
-        delay(4);
+      }
+
+      else {
+        for (int i = 0; i < (_speed); i++) {
+          leftMotor -> setSpeed(i);
+          rightMotor -> setSpeed(i);
+          leftMotor -> run(FORWARD);
+          rightMotor -> run(FORWARD);
+          previous_input = 'w';
+          delay(2);
+        }
       }
       incomingbyte = '*';
 
@@ -127,12 +137,20 @@ void loop() {
       break;
 
     case 's':
-      for (int i = 0; i < (_speed); i++) {
-        leftMotor -> setSpeed(i);
-        rightMotor -> setSpeed(i);
+      if (previous_input = 's') {
         leftMotor -> run(BACKWARD);
         rightMotor -> run(BACKWARD);
-        delay(4);
+      }
+
+      else {
+        for (int i = 0; i < (_speed); i++) {
+          leftMotor -> setSpeed(i);
+          rightMotor -> setSpeed(i);
+          leftMotor -> run(BACKWARD);
+          rightMotor -> run(BACKWARD);
+          previous_input = 's';
+          delay(2);
+        }
       }
       incomingbyte = '*';
 
@@ -140,11 +158,19 @@ void loop() {
       break;
 
     case 'a':
-      for (int i = 0; i < (_speed); i++) {
-        leftMotor -> setSpeed(0);
-        rightMotor -> setSpeed(i);
+      if (previous_input = 'a') {
         leftMotor -> run(RELEASE);
         rightMotor -> run(FORWARD);
+      }
+      else {
+        for (int i = 0; i < (_speed); i++) {
+          leftMotor -> setSpeed(0);
+          rightMotor -> setSpeed(i);
+          leftMotor -> run(RELEASE);
+          rightMotor -> run(FORWARD);
+          previous_input = 'a';
+          delay(2);
+        }
       }
       incomingbyte = '*';
 
@@ -152,11 +178,19 @@ void loop() {
       break;
 
     case 'd':
-      for (int i = 0; i < (_speed); i++) {
-        leftMotor -> setSpeed(i);
-        rightMotor -> setSpeed(0);
+      if (previous_input = 'd') {
         leftMotor -> run(FORWARD);
         rightMotor -> run(RELEASE);
+      }
+      else {
+        for (int i = 0; i < (_speed); i++) {
+          leftMotor -> setSpeed(i);
+          rightMotor -> setSpeed(0);
+          leftMotor -> run(FORWARD);
+          rightMotor -> run(RELEASE);
+          previous_input = 'd';
+          delay(2);
+        }
       }
       incomingbyte = '*';
 
@@ -177,6 +211,7 @@ void loop() {
       // If no input, stop all motors, but maintain speed setting.
       leftMotor -> run(RELEASE);
       rightMotor -> run(RELEASE);
+      previous_input = '';
       incomingbyte = '*';
 
       Serial.println("No input");
