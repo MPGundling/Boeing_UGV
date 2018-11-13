@@ -214,7 +214,7 @@ void loop() {
       // If no input, stop all motors, but maintain speed setting.
       leftMotor -> run(RELEASE);
       rightMotor -> run(RELEASE);
-      previous_input = '';
+      previous_input = 'x';
       incomingbyte = '*';
 
       Serial.println("No input");
