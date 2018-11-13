@@ -38,7 +38,6 @@ void setup() {
 
   panServo.attach(panServoPin);
   tiltServo.attach(tiltServoPin);
-
 }
 
 void loop() {
