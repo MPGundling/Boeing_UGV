@@ -24,8 +24,8 @@ int _speed_intake = 64;
 char previous_input;
 
 int servoHome = 90; //Default position of Servo
-int panServo = servoHome;
-int tiltServo = servoHome;
+int panServoSweep = servoHome;
+int tiltServoSweep = servoHome;
 
 int panServoPin = 9;
 int tiltServoPin = 10;
