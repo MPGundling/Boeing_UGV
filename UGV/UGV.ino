@@ -136,32 +136,13 @@ void loop() {
       Serial.println("Forward");
       break;
 
-    case 's':
-      if (previous_input = 's') {
-        leftMotor -> run(BACKWARD);
-        rightMotor -> run(BACKWARD);
-      }
-
-      else {
-        for (int i = 0; i < (_speed); i++) {
-          leftMotor -> setSpeed(i);
-          rightMotor -> setSpeed(i);
-          leftMotor -> run(BACKWARD);
-          rightMotor -> run(BACKWARD);
-          previous_input = 's';
-          delay(2);
-        }
-      }
-      incomingbyte = '*';
-
-      Serial.println("Backward");
-      break;
 
     case 'a':
       if (previous_input = 'a') {
         leftMotor -> run(RELEASE);
         rightMotor -> run(FORWARD);
       }
+      
       else {
         for (int i = 0; i < (_speed); i++) {
           leftMotor -> setSpeed(0);
@@ -177,11 +158,33 @@ void loop() {
       Serial.println("Left");
       break;
 
+    case 's':
+      if (previous_input = 's') {
+        leftMotor -> run(BACKWARD);
+        rightMotor -> run(BACKWARD);
+      }
+      
+      else {
+        for (int i = 0; i < (_speed); i++) {
+          leftMotor -> setSpeed(i);
+          rightMotor -> setSpeed(i);
+          leftMotor -> run(BACKWARD);
+          rightMotor -> run(BACKWARD);
+          previous_input = 's';
+          delay(2);
+        }
+      }
+      incomingbyte = '*';
+
+      Serial.println("Backward");
+      break;
+
     case 'd':
       if (previous_input = 'd') {
         leftMotor -> run(FORWARD);
         rightMotor -> run(RELEASE);
       }
+      
       else {
         for (int i = 0; i < (_speed); i++) {
           leftMotor -> setSpeed(i);
