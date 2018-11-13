@@ -94,8 +94,43 @@ void loop() {
       Serial.println("Intake - 100% Power");
       break;
 
+    //MARK: Servo control.
+    //TODO: Ensure that comments and mappings are accurate. Idk what is left or right/ up or down
+    // Pan LEFT.
+    case 't':
+      servo.write(panServoSweep--);
+      incomingbyte = '*'
+
+      Serial.println("Panning - left");
+      break;
+
+    // Pan RIGHT.
+    case 'y':
+      servo.write(panServoSweep++);
+      incomingbyte = '*'
+
+      Serial.println("Panning - right");
+      break;
+
+    // Tilt DOWN.
+    case 'g':
+      servo.write(tiltServoSweep--);
+      incomingbyte = '*'
+
+      Serial.println("Tilting - down");
+      break;    
+
+    // Tilt UP.
+    case 'h':
+      servo.write(tiltServoSweep++);
+      incomingbyte = '*'
+
+      Serial.println("Tilting - up");
+      break;
+
     //MARK: Belt intake control.
 
+    // Intake IN.
     case 'i':
       for (int i = 0; i < (_speed_intake); i++) {
         intakeMotor -> setSpeed(_speed_intake);
@@ -107,6 +142,7 @@ void loop() {
       Serial.println("Intake accepting");
       break;
 
+    // Intake OUT.
     case 'o':
       for (int i = 0; i < (_speed_intake); i++) {
         intakeMotor -> setSpeed(_speed_intake);
@@ -117,7 +153,8 @@ void loop() {
 
       Serial.println("Intake rejecting");
       break;
-
+    
+    // Intake STOP.
     case 'p':
       intakeMotor -> setSpeed(0);
       intakeMotor -> run(RELEASE);
@@ -129,6 +166,7 @@ void loop() {
 
     //MARK: Movement control.
 
+    // Move FORWARD.
     case 'w':
       if (previous_input = 'w') {
         leftMotor -> run(FORWARD);
@@ -150,13 +188,13 @@ void loop() {
       Serial.println("Forward");
       break;
 
-
+    // Move LEFT.
     case 'a':
       if (previous_input = 'a') {
         leftMotor -> run(RELEASE);
         rightMotor -> run(FORWARD);
       }
-      
+
       else {
         for (int i = 0; i < (_speed); i++) {
           leftMotor -> setSpeed(0);
@@ -172,12 +210,13 @@ void loop() {
       Serial.println("Left");
       break;
 
+    // Move BACKWARDS.
     case 's':
       if (previous_input = 's') {
         leftMotor -> run(BACKWARD);
         rightMotor -> run(BACKWARD);
       }
-      
+
       else {
         for (int i = 0; i < (_speed); i++) {
           leftMotor -> setSpeed(i);
@@ -193,12 +232,13 @@ void loop() {
       Serial.println("Backward");
       break;
 
+    // Move RIGHT.
     case 'd':
       if (previous_input = 'd') {
         leftMotor -> run(FORWARD);
         rightMotor -> run(RELEASE);
       }
-      
+
       else {
         for (int i = 0; i < (_speed); i++) {
           leftMotor -> setSpeed(i);
@@ -214,21 +254,25 @@ void loop() {
       Serial.println("Right");
       break;
 
+    // STOP (default case -> slow down engine)
     case ' ':
-      leftMotor -> setSpeed(0);
-      rightMotor -> setSpeed(0);
-      leftMotor -> run(RELEASE);
-      rightMotor -> run(RELEASE);
+      for (int i = (_speed); i > 0; i--) {
+        leftMotor -> setSpeed(i);
+        rightMotor -> setSpeed(i);
+        leftMotor -> run(RELEASE);
+        rightMotor -> run(RELEASE);
+      }
       incomingbyte = '*';
 
-      Serial.println("STOP");
+      Serial.println("STOP MOVEMENT");
       break;
 
+    // STOP (force stop -> sudden and damages gears)
     default:
       // If no input, stop all motors, but maintain speed setting.
       leftMotor -> run(RELEASE);
       rightMotor -> run(RELEASE);
-      previous_input = 'x';
+      previous_input = 'z';
       incomingbyte = '*';
 
       Serial.println("No input");
