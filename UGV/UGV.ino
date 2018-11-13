@@ -254,7 +254,7 @@ void loop() {
       Serial.println("Right");
       break;
 
-    // STOP (default case -> slow down engine)
+    // STOP (force stop -> sudden and damages gears)
     case ' ':
       for (int i = (_speed); i > 0; i--) {
         leftMotor -> setSpeed(i);
@@ -267,7 +267,7 @@ void loop() {
       Serial.println("STOP MOVEMENT");
       break;
 
-    // STOP (force stop -> sudden and damages gears)
+    // STOP (default case -> slow down engine)
     default:
       // If no input, stop all motors, but maintain speed setting.
       leftMotor -> run(RELEASE);
