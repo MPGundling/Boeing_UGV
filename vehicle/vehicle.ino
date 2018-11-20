@@ -1,6 +1,10 @@
 
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
+#include <nRF24L01.h>
+#include <RF24.h>
+#include <RF24_config.h>
+#include <printf.h>
 
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield(); 
@@ -14,37 +18,50 @@ Adafruit_DCMotor *rightMotor = AFMS.getMotor(2);
 // Intake motor
 Adafruit_DCMotor *intakeMotor = AFMS.getMotor(3);
 
+RF24 receive (2,3);                         //create object called receive
+byte address [6] = "00001";                 //creat an array with 5 elements, where each element is 1 byte;
+
 int incomingbyte = 0;
 int _speed = 64;
 void setup() {
+  //setup serial terminal
   Serial.begin(9600);
   Serial.println("Boeing UGV - Press 'W' for forward, 'S' for reverse, 'A' for left, 'D' for right, 'SPACE' for stop");
-  
+ 
+  //setup motor controller 
   AFMS.begin();  // create with the default frequency 1.6KHz
-  
+
+  //setup receiever
+  receive.begin();
+  receive.openReadingPipe(0,address);      //open reading pipe 0 at address 00001 
+  receive.setPALevel(RF24_PA_MIN);         //Set RF output to minimum
+  receive.setDataRate(RF24_250KBPS);       //set datarate to 250kbps
+  receive.setChannel(100);                 //set frequency to channel 100 
+  receive.startListening();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
- if(Serial.available()>0)
+ if(receive.available())
  {
-  incomingbyte = Serial.read();
+  char incomingbtye;
+  receive.read(&incomingbyte,sizeof(incomingbtye));
  }
  switch(incomingbyte)
  {
-  case 'g':
+  case '1':
     Serial.println("25% Power");
     _speed = 64; 
     incomingbyte = '*';
     break;
   
-  case 'h':
+  case '2':
     Serial.println("50% Power");
     _speed = 128;
     incomingbyte='*';
     break;
   
-  case 'b':
+  case '3':
     Serial.println("100% Power");
     _speed = 250;
     incomingbyte='*';
@@ -89,7 +106,7 @@ void loop() {
     rightMotor->run(RELEASE);
     incomingbyte = '*';
     break;
-  case 'f':
+  case 't':
     Serial.println("Current test. All on");
     intakeMotor->setSpeed(_speed);
     leftMotor->setSpeed(_speed);
