@@ -1,27 +1,42 @@
-/*
-* Arduino Wireless Communication Tutorial
-*       Example 1 - Receiver Code
-*                
-* by Dejan Nedelkovski, www.HowToMechatronics.com
-* 
-* Library: TMRh20/RF24, https://github.com/tmrh20/RF24/
-*/
-#include <SPI.h>
+
+
+#include <Wire.h> //IIC Library
+
+
 #include <nRF24L01.h>
+#include <printf.h>
 #include <RF24.h>
-RF24 radio(7, 8); // CE, CSN
-const byte address[6] = "00001";
-void setup() {
+#include <RF24_config.h>
+
+RF24 receive (7,8);                         //create object called receive
+byte address [5] = "00001";                 //creat an array with 5 elements, where each element is 1 byte;
+
+String text = " ";//String to hold the text
+
+void setup()
+{
+ 
+
   Serial.begin(9600);
-  radio.begin();
-  radio.openReadingPipe(0, address);
-  radio.setPALevel(RF24_PA_MIN);
-  radio.startListening();
+  Serial.print("Starting Receiver \n");
+  receive.begin();
+  receive.openReadingPipe(0,address);      //open reading pipe 0 at address 00001 
+  receive.setPALevel(RF24_PA_MAX);         //Set RF output to maximum
+  receive.setDataRate(RF24_250KBPS);       //set datarate to 250kbps
+  receive.setChannel(20);                 //set frequency to channel 20 
+  receive.startListening(); 
+
 }
-void loop() {
-  if (radio.available()>0) {
-    char text[32] = "";
-    radio.read(&text, sizeof(text));
+
+void loop(){
+
+  
+    if (receive.available())                //check when received data available
+  {
+    char buf[32];
+    receive.read(&buf, sizeof(buf));
+    text = (char*)buf;
     Serial.println(text);
   }
 }
+   
