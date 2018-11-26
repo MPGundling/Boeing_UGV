@@ -24,22 +24,22 @@ void setup() {
 
 void loop() {
 
-  if (Serial.available()){
-    delay (100);
-    Serial.println ("I found Serial Data");// If you are having issues, these will help you find where your code doesnt work.
-    serialdata=Serial.readString();//put text from serial in serialdata string¸
-  }
+ while(Serial.available()){
     
-    else {
-
-      serialdata.toCharArray(msg, 32);//convert serialdat the the msg char array
-      Serial.println ("I converted it to a CHAR ARRAY");
-      Serial.println("Text to be Sent-");//debugging
-      Serial.println("");//debugging
-      Serial.print(msg);//debugging
-      Serial.println("");//debugging     
+    //Serial.println ("I found Serial Data");// If you are having issues, these will help you find where your code doesnt work.
+    serialdata=Serial.readString();//put text from serial in serialdata string¸
+    serialdata.toCharArray(msg, 4);//convert serialdat the the msg char array
+    //Serial.println ("I converted it to a CHAR ARRAY");
+    //Serial.println("Text to be Sent-");//debugging
+    //Serial.println("");//debugging
+    Serial.print(msg);//debugging
+    //Serial.println("");//debugging
    }
 
-  transmit.write(msg, 32);    
+  delay(10);
+  transmit.write(msg, 4);
+  
+  for(int i=0; i <= sizeof(msg); i++){
+    msg[i] = 0;
+  }
 }
-

@@ -9,7 +9,7 @@
 #include <RF24_config.h>
 
 RF24 receive (7,8);                         //create object called receive
-byte address [5] = "00001";                 //creat an array with 5 elements, where each element is 1 byte;
+byte address [6] = "00001";                 //creat an array with 5 elements, where each element is 1 byte;
 
 String text = " ";//String to hold the text
 
@@ -29,7 +29,7 @@ void setup()
 }
 
 void loop(){
-
+ 
   
     if (receive.available())                //check when received data available
   {
