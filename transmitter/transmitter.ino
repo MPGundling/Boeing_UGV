@@ -27,7 +27,7 @@ void loop() {
  while(Serial.available()){
     
     //Serial.println ("I found Serial Data");// If you are having issues, these will help you find where your code doesnt work.
-    serialdata=Serial.readString();//put text from serial in serialdata string¸
+    serialdata=Serial.read();//put text from serial in serialdata string¸
     serialdata.toCharArray(msg, 4);//convert serialdat the the msg char array
     //Serial.println ("I converted it to a CHAR ARRAY");
     //Serial.println("Text to be Sent-");//debugging
