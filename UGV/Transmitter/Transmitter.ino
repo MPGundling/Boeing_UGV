@@ -14,6 +14,11 @@ const int left_y_axis = 0;             //left joystick y-axis for left motor con
 const int right_y_axis = 1;            //right joystick y-axis for right motor control (pin A1)
 const int pan_x_axis = 2;              //pan/tilt joystick x axis for pan control (Pin A2)
 const int tilt_y_axis = 3;             //pan/tilt joystick y-axis for tilt control (pin A3)
+int left_motor = 0;                    //left motor speed initialization
+int right_motor = 0;                   //right motor speed initialization
+int pan_angle = 90;                    //initial pan angle (center)
+int tilt_angle = 0;                    //initial tilt angle (down)
+int pot_value = 0;                     //variable for servo mapping
 
 void setup() {
   Serial.begin(115200);
@@ -51,4 +56,22 @@ void loop() {
   for(int i=0; i <= sizeof(msg); i++){
     msg[i] = 0;
   }*/
+  left_motor = analogRead(left_y_axis);           //read 0-1023 value from left joystick
+  right_motor = analogRead(right_y_axis);         //read 0-1023 value from right joystick
+  pot_value = analogRead(pan_x_axis);             //read 0-1023 value from pan/tilt x-axis
+  pan_angle = map(pot_value, 0, 1023, 0, 180);    //map x-axis value to 0-180 degrees for servo position
+  pot_value = analogRead(tilt_y_axis);            //read 0-1023 value from pan/tilt y-axis
+  tilt_angle = map(pot_value, 0, 1023, 0, 180);    //map y-axis value to 0-180 degrees
+
+  Serial.print("Left motor: ");
+  Serial.println(left_motor);
+  Serial.print("Right motor: ");
+  Serial.println(right_motor);
+  Serial.print("Pan angle: ");
+  Serial.println(pan_angle);
+  Serial.print("Tilt angle: ");
+  Serial.println(tilt_angle);
+
+  delay(100);
+
 }
