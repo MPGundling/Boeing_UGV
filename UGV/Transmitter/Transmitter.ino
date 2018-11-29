@@ -32,8 +32,8 @@ void setup() {
    }
 
 void loop() {
-
- while(Serial.available()){
+//commented wireless for joystick test
+ /*while(Serial.available()){
     
     //Serial.println ("I found Serial Data");// If you are having issues, these will help you find where your code doesnt work.
     serialdata=Serial.read();//put text from serial in serialdata string¸
@@ -50,5 +50,5 @@ void loop() {
   
   for(int i=0; i <= sizeof(msg); i++){
     msg[i] = 0;
-  }
+  }*/
 }
