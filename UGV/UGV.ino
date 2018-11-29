@@ -1,114 +1,45 @@
+#include <nRF24L01.h>
+#include <printf.h>
+#include <RF24.h>
+#include <RF24_config.h>
 
-#include <Wire.h>
-#include <Adafruit_MotorShield.h>
+String serialdata; //Holds data coming in
+char msg[32]; //Char array to send data out with
 
-// Create the motor shield object with the default I2C address
-Adafruit_MotorShield AFMS = Adafruit_MotorShield(); 
-// Or, create it with a different I2C address (say for stacking)
-// Adafruit_MotorShield AFMS = Adafruit_MotorShield(0x61); 
+RF24 transmit (7,8);                    //create RF24 object called transmit
 
-// Left motor (M1)
-Adafruit_DCMotor *leftMotor = AFMS.getMotor(1);
-//Right Motor (M2)
-Adafruit_DCMotor *rightMotor = AFMS.getMotor(2);
-// Intake motor
-Adafruit_DCMotor *intakeMotor = AFMS.getMotor(3);
+byte address [6] = "00001";             //set address to 00001
 
-int incomingbyte = 0;
-int _speed = 64;
 void setup() {
   Serial.begin(9600);
-  Serial.println("Boeing UGV - Press 'W' for forward, 'S' for reverse, 'A' for left, 'D' for right, 'SPACE' for stop");
+  Serial.println ("Serial Port Open");
   
-  AFMS.begin();  // create with the default frequency 1.6KHz
-  
-}
+  transmit.begin();
+  transmit.openWritingPipe(address);    //open writing pipe to address 00001
+  transmit.setPALevel(RF24_PA_MAX);     //set RF power output to maximum
+  transmit.setDataRate(RF24_250KBPS);   //set datarate to 250kbps
+  transmit.setChannel(20);             //set frequency to channel 20
+  transmit.stopListening();   
+   }
 
 void loop() {
-  // put your main code here, to run repeatedly:
- if(Serial.available()>0)
- {
-  incomingbyte = Serial.read();
- }
- switch(incomingbyte)
- {
-  case 'g':
-    Serial.println("25% Power");
-    _speed = 64; 
-    incomingbyte = '*';
-    break;
-  
-  case 'h':
-    Serial.println("50% Power");
-    _speed = 128;
-    incomingbyte='*';
-    break;
-  
-  case 'b':
-    Serial.println("100% Power");
-    _speed = 250;
-    incomingbyte='*';
-    break;
-  
-  case 'w':
-    Serial.println("Forward");
-    for (int i=0; i<(_speed); i++){
-      leftMotor->setSpeed(i);
-      rightMotor->setSpeed(i);
-      leftMotor->run(FORWARD);
-      rightMotor->run(FORWARD);
-      delay(4);
-    }
+
+ while(Serial.available()){
     
-    incomingbyte = '*';
-    break;
-  
-  case 's':
-    Serial.println("Backward");
-    leftMotor->setSpeed(150);
-    rightMotor->setSpeed(150);
-    leftMotor->run(BACKWARD);
-    rightMotor->run(BACKWARD);
-    incomingbyte = '*';
-    break;
-    
-  case 'a':
-    Serial.println("Left");
-    leftMotor->setSpeed(0);
-    rightMotor->setSpeed(150);
-    leftMotor->run(RELEASE);
-    rightMotor->run(FORWARD);
-    incomingbyte = '*';
-    break;
- 
-  case 'd':
-    Serial.println("Right");
-    leftMotor->setSpeed(150);
-    rightMotor->setSpeed(0);
-    leftMotor->run(FORWARD);
-    rightMotor->run(RELEASE);
-    incomingbyte = '*';
-    break;
-  case 'f':
-    Serial.println("Current test. All on");
-    intakeMotor->setSpeed(_speed);
-    leftMotor->setSpeed(_speed);
-    rightMotor->setSpeed(_speed);
-    intakeMotor->run(FORWARD);
-    leftMotor->run(FORWARD);
-    rightMotor->run(FORWARD);
-    incomingbyte='*';
-    break;
-   case ' ':
-    Serial.println("STOP");
-    leftMotor->setSpeed(0);
-    rightMotor->setSpeed(0);
-    leftMotor->run(RELEASE);
-    rightMotor->run(RELEASE);
-    intakeMotor->run(RELEASE);
-    incomingbyte = '*';
-    break;
-  
+    //Serial.println ("I found Serial Data");// If you are having issues, these will help you find where your code doesnt work.
+    serialdata=Serial.read();//put text from serial in serialdata string¸
+    serialdata.toCharArray(msg, 4);//convert serialdat the the msg char array
+    //Serial.println ("I converted it to a CHAR ARRAY");
+    //Serial.println("Text to be Sent-");//debugging
+    //Serial.println("");//debugging
+    Serial.print(msg);//debugging
+    //Serial.println("");//debugging
+   }
+
   delay(10);
- }//end switch
-}//end void loop
+  transmit.write(msg, 4);
+  
+  for(int i=0; i <= sizeof(msg); i++){
+    msg[i] = 0;
+  }
+}
