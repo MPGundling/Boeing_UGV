@@ -23,20 +23,70 @@ void setup() {
   receiver.begin();
   receiver.openReadingPipe(0, address);
   receiver.setPALevel(RF24_PA_MIN);
+  receiver.setDataRate(RF24_250KBPS);
+  receiver.setChannel(20);
   receiver.startListening();
 
   AFMS.begin();  // create with the default frequency 1.6KHz
 }
 
 void loop() {
-  if (receiver.available()) {
-    char incoming[6] = "";
+  while (receiver.available()) {
+    Serial.println("Starting program");
+    // data structure: [left motor, right motor, pan servo, tilt servo, belt intake on/off]
+    int incoming[6];
     receiver.read(&incoming, sizeof(incoming));
-    Serial.println(incoming);
+    Serial.println(incoming[4]);
 
+    // Idle motorL behavior.
+    if (475 < incoming[0] < 550) {
+      leftMotor -> setSpeed(0);
+      leftMotor -> run(RELEASE);
+      Serial.println("L IDLE");
+    }
+
+    // Idle motorR behavior.
+    if (475 < incoming[1] < 650) {
+      rightMotor -> setSpeed(0);
+      rightMotor -> run(RELEASE);
+      Serial.println("R IDLE");
+    }
+    
+    // Forward motorL logic.
+    if (incoming[0] > 550) {
+      int FL_speed = map(incoming[0], 550, 1023, 0, 255);
+      leftMotor -> setSpeed(FL_speed);
+      leftMotor -> run(BACKWARD);
+      Serial.println("L FORWARD");
+    }
+
+    // Forward motorR logic.
+    if (incoming[1] > 550) {
+      int FR_speed = map(incoming[1], 550, 1023, 0, 255);
+      rightMotor -> setSpeed(FR_speed);
+      rightMotor -> run(FORWARD);
+      Serial.println("R FORWARD");
+    }
+
+    // Backward motorL logic. 
+    if (incoming[0] < 475) {
+      //int BL_speed = map(incoming[0], 0, 400, 0, 255);
+      leftMotor -> setSpeed(125);
+      leftMotor -> run(FORWARD);
+      Serial.println("L BACKWARD");
+    }
+
+    // Backward motorR logic. 
+    if (incoming[1] < 475) {
+      rightMotor -> setSpeed(125);
+      rightMotor -> run(BACKWARD);
+      Serial.println("R BACKWARD");
+    }
+
+    // Intake motor logic.
     if (incoming[4] == 0) {
-      intakeMotor -> setSpeed(255);
-      intakeMotor -> run(FORWARD);
+      intakeMotor -> setSpeed(75);
+      intakeMotor -> run(BACKWARD);
       Serial.println("Intake running...");
     }
 
