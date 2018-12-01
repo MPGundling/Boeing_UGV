@@ -6,8 +6,8 @@
 #include <Wire.h>
 
 // R/T variable instantiation.
-RF24 receiver(7,8);   
-byte address [6] = "00001";   
+RF24 receiver(7, 8);
+byte address [6] = "00001";
 
 // Adafruit Motorshield variable instantiation.
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -19,37 +19,31 @@ Adafruit_DCMotor *rightMotor = AFMS.getMotor(4);
 Adafruit_DCMotor *intakeMotor = AFMS.getMotor(2);
 
 void setup() {
-    Serial.begin(9600);
-    receiver.begin();
-    receiver.openReadingPipe(0, address);
-    receiver.setPALevel(RF24_PA_MIN);
-    receiver.startListening();
+  Serial.begin(9600);
+  receiver.begin();
+  receiver.openReadingPipe(0, address);
+  receiver.setPALevel(RF24_PA_MIN);
+  receiver.startListening();
 
-    AFMS.begin();  // create with the default frequency 1.6KHz
+  AFMS.begin();  // create with the default frequency 1.6KHz
 }
 
 void loop() {
-    if (radio.available()) {
-        char incoming[6] = "";
-        receiver.read(&incoming, sizeof(incoming));
-        Serial.println(incoming);
-    }
+  if (receiver.available()) {
+    char incoming[6] = "";
+    receiver.read(&incoming, sizeof(incoming));
+    Serial.println(incoming);
 
     if (incoming[4] == 0) {
-        intakeMotor -> setSpeed(255);
-        intakeMotor -> run(FORWARD);
-        Serial.println("Intake running...")
+      intakeMotor -> setSpeed(255);
+      intakeMotor -> run(FORWARD);
+      Serial.println("Intake running...");
     }
 
     else {
-        intakeMotor -> setSpeed(0);
-        intakeMotor -> run(RELEASE);
-        Serial.println("Intake stopped.")
+      intakeMotor -> setSpeed(0);
+      intakeMotor -> run(RELEASE);
+      Serial.println("Intake stopped.");
     }
-    /*
-
-    if ((incoming[0] > 0) && (incoming[1] <= 0) {
-
-    }
-    */
+  }
 }
