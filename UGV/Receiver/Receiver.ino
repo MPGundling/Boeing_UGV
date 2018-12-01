@@ -33,42 +33,43 @@ void setup() {
 void loop() {
   while (receiver.available()) {
     Serial.println("Starting program");
+    // data structure: [left motor, right motor, pan servo, tilt servo, belt intake on/off]
     int incoming[6];
     receiver.read(&incoming, sizeof(incoming));
     Serial.println(incoming[4]);
 
     // Idle motorL behavior.
-    if (400 < incoming[0] < 600) {
+    if (475 < incoming[0] < 550) {
       leftMotor -> setSpeed(0);
       leftMotor -> run(RELEASE);
       Serial.println("L IDLE");
     }
 
     // Idle motorR behavior.
-    if (400 < incoming[1] < 600) {
+    if (475 < incoming[1] < 650) {
       rightMotor -> setSpeed(0);
       rightMotor -> run(RELEASE);
       Serial.println("R IDLE");
     }
     
     // Forward motorL logic.
-    if (incoming[0] > 600) {
-      int FL_speed = map(incoming[0], 600, 1023, 0, 255);
+    if (incoming[0] > 550) {
+      int FL_speed = map(incoming[0], 550, 1023, 0, 255);
       leftMotor -> setSpeed(FL_speed);
       leftMotor -> run(BACKWARD);
       Serial.println("L FORWARD");
     }
 
     // Forward motorR logic.
-    if (incoming[1] > 600) {
-      int FR_speed = map(incoming[1], 600, 1023, 0, 255);
+    if (incoming[1] > 550) {
+      int FR_speed = map(incoming[1], 550, 1023, 0, 255);
       rightMotor -> setSpeed(FR_speed);
       rightMotor -> run(FORWARD);
       Serial.println("R FORWARD");
     }
 
     // Backward motorL logic. 
-    if (incoming[0] < 400) {
+    if (incoming[0] < 475) {
       //int BL_speed = map(incoming[0], 0, 400, 0, 255);
       leftMotor -> setSpeed(125);
       leftMotor -> run(FORWARD);
@@ -76,8 +77,8 @@ void loop() {
     }
 
     // Backward motorR logic. 
-    if (incoming[1] < 400) {
-      rightMotor -> setSpeed(250);
+    if (incoming[1] < 475) {
+      rightMotor -> setSpeed(125);
       rightMotor -> run(BACKWARD);
       Serial.println("R BACKWARD");
     }
