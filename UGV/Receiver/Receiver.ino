@@ -37,52 +37,52 @@ void loop() {
     receiver.read(&incoming, sizeof(incoming));
     Serial.println(incoming[4]);
 
-    // Idle motor behavior.
-    if ((400 < incoming[0] < 600) && (400 < incoming[1] < 600)) {
+    // Idle motorL behavior.
+    if (400 < incoming[0] < 600) {
       leftMotor -> setSpeed(0);
-      rightMotor -> setSpeed(0);
       leftMotor -> run(RELEASE);
+      Serial.println("L IDLE");
+    }
+
+    // Idle motorR behavior.
+    if (400 < incoming[1] < 600) {
+      rightMotor -> setSpeed(0);
       rightMotor -> run(RELEASE);
-      Serial.println("IDLE");
+      Serial.println("R IDLE");
     }
     
-    // Motor forwards logic.
-    if (incoming[0] > 600 && incoming[1] > 600) {
-      leftMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
-      rightMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
-      leftMotor -> run(FORWARD);
-      rightMotor -> run(FORWARD);
-      Serial.println("FORWARD");
-    }
-
-    // Motor backward logic. 
-    if (incoming[0] < 400 && incoming[1] < 400) {
-      leftMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
-      rightMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
+    // Forward motorL logic.
+    if (incoming[0] > 600) {
+      int FL_speed = map(incoming[0], 600, 1023, 0, 255);
+      leftMotor -> setSpeed(FL_speed);
       leftMotor -> run(BACKWARD);
-      rightMotor -> run(BACKWARD);
-      Serial.println("BACKWARD");
+      Serial.println("L FORWARD");
     }
 
-    // Motor left logic.
-    if (incoming[0] < 400 && incoming[1] > 600) {
-      leftMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
-      rightMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
-      leftMotor -> run(BACKWARD);
+    // Forward motorR logic.
+    if (incoming[1] > 600) {
+      int FR_speed = map(incoming[1], 600, 1023, 0, 255);
+      rightMotor -> setSpeed(FR_speed);
       rightMotor -> run(FORWARD);
-      Serial.println("LEFT");
+      Serial.println("R FORWARD");
     }
 
-    // Motor right logic.
-    if (incoming[0] > 600 && incoming[1] < 400) {
-      leftMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
-      rightMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
+    // Backward motorL logic. 
+    if (incoming[0] < 400) {
+      //int BL_speed = map(incoming[0], 0, 400, 0, 255);
+      leftMotor -> setSpeed(125);
       leftMotor -> run(FORWARD);
-      rightMotor -> run(BACKWARD);
-      Serial.println("RIGHT");
+      Serial.println("L BACKWARD");
     }
 
-    // intake logic.
+    // Backward motorR logic. 
+    if (incoming[1] < 400) {
+      rightMotor -> setSpeed(250);
+      rightMotor -> run(BACKWARD);
+      Serial.println("R BACKWARD");
+    }
+
+    // Intake motor logic.
     if (incoming[4] == 0) {
       intakeMotor -> setSpeed(75);
       intakeMotor -> run(BACKWARD);
