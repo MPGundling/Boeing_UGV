@@ -72,6 +72,6 @@ void loop() {
   Serial.print("Tilt angle: ");
   Serial.println(tilt_angle);
 
-  delay(100);
+  delay(50);
 
 }
