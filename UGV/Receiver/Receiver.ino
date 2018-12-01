@@ -43,6 +43,7 @@ void loop() {
       rightMotor -> setSpeed(0);
       leftMotor -> run(RELEASE);
       rightMotor -> run(RELEASE);
+      Serial.println("IDLE");
     }
     
     // Motor forwards logic.
@@ -54,7 +55,32 @@ void loop() {
       Serial.println("FORWARD");
     }
 
-    
+    // Motor backward logic. 
+    if (incoming[0] < 400 && incoming[1] < 400) {
+      leftMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
+      rightMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
+      leftMotor -> run(BACKWARD);
+      rightMotor -> run(BACKWARD);
+      Serial.println("BACKWARD");
+    }
+
+    // Motor left logic.
+    if (incoming[0] < 400 && incoming[1] > 600) {
+      leftMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
+      rightMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
+      leftMotor -> run(BACKWARD);
+      rightMotor -> run(FORWARD);
+      Serial.println("LEFT");
+    }
+
+    // Motor right logic.
+    if (incoming[0] > 600 && incoming[1] < 400) {
+      leftMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
+      rightMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
+      leftMotor -> run(FORWARD);
+      rightMotor -> run(BACKWARD);
+      Serial.println("RIGHT");
+    }
 
     // intake logic.
     if (incoming[4] == 0) {
