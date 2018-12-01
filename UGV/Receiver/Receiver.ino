@@ -23,20 +23,43 @@ void setup() {
   receiver.begin();
   receiver.openReadingPipe(0, address);
   receiver.setPALevel(RF24_PA_MIN);
+  receiver.setDataRate(RF24_250KBPS);
+  receiver.setChannel(20);
   receiver.startListening();
 
   AFMS.begin();  // create with the default frequency 1.6KHz
 }
 
 void loop() {
-  if (receiver.available()) {
-    char incoming[6] = "";
+  while (receiver.available()) {
+    Serial.println("Starting program");
+    int incoming[6];
     receiver.read(&incoming, sizeof(incoming));
-    Serial.println(incoming);
+    Serial.println(incoming[4]);
 
+    // Idle motor behavior.
+    if ((400 < incoming[0] < 600) && (400 < incoming[1] < 600)) {
+      leftMotor -> setSpeed(0);
+      rightMotor -> setSpeed(0);
+      leftMotor -> run(RELEASE);
+      rightMotor -> run(RELEASE);
+    }
+    
+    // Motor forwards logic.
+    if (incoming[0] > 600 && incoming[1] > 600) {
+      leftMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
+      rightMotor -> setSpeed((incoming[0] + incoming[1]) / 2);
+      leftMotor -> run(FORWARD);
+      rightMotor -> run(FORWARD);
+      Serial.println("FORWARD");
+    }
+
+    
+
+    // intake logic.
     if (incoming[4] == 0) {
-      intakeMotor -> setSpeed(255);
-      intakeMotor -> run(FORWARD);
+      intakeMotor -> setSpeed(75);
+      intakeMotor -> run(BACKWARD);
       Serial.println("Intake running...");
     }
 
