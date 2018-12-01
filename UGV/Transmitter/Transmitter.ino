@@ -5,7 +5,7 @@
 
 //nRF24 constants and variables
 String serialdata; //Holds data coming in
-char msg[32]; //Char array to send data out with
+char msg[6]; //Char array to send data out with
 RF24 transmit (7,8);                    //create RF24 object called transmit
 byte address [6] = "00001";             //set address to 00001
 
