@@ -33,20 +33,18 @@ void loop() {
         char incoming[6] = "";
         receiver.read(&incoming, sizeof(incoming));
         Serial.println(incoming);
-
-        if (incoming[4] == 0) {
-            intakeMotor -> setSpeed(255);
-            intakeMotor -> run(FORWARD);
-            Serial.println("Intake running...")
-        }
-
-        else {
-            intakeMotor -> setSpeed(0);
-            intakeMotor -> run(RELEASE);
-            Serial.println("Intake stopped.")
-        }
+    }
+    if (incoming[4] == 0) {
+        intakeMotor -> setSpeed(255);
+        intakeMotor -> run(FORWARD);
+        Serial.println("Intake running...")
     }
 
+    else {
+        intakeMotor -> setSpeed(0);
+        intakeMotor -> run(RELEASE);
+        Serial.println("Intake stopped.")
+    }
     /*
 
     if ((incoming[0] > 0) && (incoming[1] <= 0) {
