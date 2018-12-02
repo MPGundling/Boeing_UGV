@@ -2,8 +2,8 @@
 This repository holds the programming logic for Boeing (Team 3) for CMPEN482 at the Pennsylvania State University.
 
 Overview:
-Progammed in Arduino extensively using the Adafruit Motorshield_v2 library. The command center sends serial bytes from the keyboard. The code expects a constant stream of bytes, and accepts a "no input" as default. Putty will be used in place of Arduino's serial monitor to enable us to hold down keys and control the UGV fluidly.
-
+Progammed in Arduino extensively using the Adafruit Motorshield_v2 library. We have two arduino programs, one to transmit data, and the other to receive data and command the UGV. Transmission is handled using the nrfl01 R/T pair and the associated library.
+In accordance with our efforts to maintain a afe device, a key-fob is implemented in between our power supply and controls, allowing us to disable the UGV remotely, and restart it.
 Contributors:
 
 Mark Gundling
@@ -13,18 +13,11 @@ Christian Lim
 Control Overview:
 Movement Controls:
 
-  w,a,s,d : Directional control of UGV (Forward, Left, Reverse, Right).
+  Left joystick: Movement control with left motor.
   
-  b,n,m : Movement speed toggling at 25%, 50%, 100% power respectively.
+  Central joystick: Pan/Tilt control with motor.
   
-  ' ' (spacebar) : Stop command. Sets speed to all movement motors to 0 and releases movement motors.
+  Right joystick: Movement control with right motor.
 
-Intake Controls:
-
-  i,o : Directional control of intake belt (In, Out).
-  
-  j,k,l : Intake speed toggling at 25%, 50%, 100% power respectively.
-
-Miscellanous:
-TODO: Camera pan, kill switch, R/T summaries.
+  Button: Intake control motor.
   
