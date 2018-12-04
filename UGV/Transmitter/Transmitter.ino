@@ -63,8 +63,10 @@ void loop() {
   
   delay(50);
   
-  Serial.print(pan_angle);
+  Serial.print(msg[0]);
   Serial.print("     ");
-  Serial.print(tilt_angle);
+  Serial.print(msg[1]);
+  Serial.print("     ");
+  Serial.print(intake);
   Serial.println("");
 }
