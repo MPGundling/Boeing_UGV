@@ -14,8 +14,8 @@ byte address [6] = "00001";             //set address to 00001
 //Joystick constants
 const int left_y_axis = 0;             //left joystick y-axis for left motor control (pin A0)
 const int right_y_axis = 2;            //right joystick y-axis for right motor control (pin A1)
-const int pan_x_axis = 4;              //pan/tilt joystick x axis for pan control (Pin A2)
-const int tilt_y_axis = 5;             //pan/tilt joystick y-axis for tilt control (pin A3)
+const int pan_x_axis = 5;              //pan/tilt joystick x axis for pan control (Pin A2)
+const int tilt_y_axis = 4;             //pan/tilt joystick y-axis for tilt control (pin A3)
 int left_motor = 0;                    //left motor speed initialization
 int right_motor = 0;                   //right motor speed initialization
 int pan_angle = 90;                    //initial pan angle (center)
@@ -25,7 +25,8 @@ int pot_value = 0;                     //variable for servo mapping
 int intake = 0;
 
 void setup() {
-  pinMode(button, INPUT); 
+  pinMode(button, INPUT);
+  digitalWrite(button, HIGH); 
   Serial.begin(9600);
   Serial.println("Serial open");
   
@@ -67,6 +68,10 @@ void loop() {
   Serial.print("     ");
   Serial.print(msg[1]);
   Serial.print("     ");
-  Serial.print(intake);
+  Serial.print(msg[2]);
+  Serial.print("     ");
+  Serial.print(msg[3]);
+  Serial.print("     ");
+  Serial.print(msg[4]);
   Serial.println("");
 }
